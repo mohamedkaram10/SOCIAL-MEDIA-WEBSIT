@@ -17,7 +17,6 @@ const postCreating = ref(false)
                 Submit
             </button>
         </div>
-
     </div>
 </template>
 

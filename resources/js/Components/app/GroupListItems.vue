@@ -2,6 +2,7 @@
 import TextInput from "@/Components/TextInput.vue";
 import GroupItem from "@/Components/app/GroupItem.vue";
 import {ref} from "vue";
+
 const searchKeyword = ref('')
 </script>
 
@@ -119,4 +120,5 @@ const searchKeyword = ref('')
 </template>
 
 <style scoped>
+
 </style>

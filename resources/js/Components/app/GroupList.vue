@@ -1,6 +1,7 @@
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel} from "@headlessui/vue";
 import GroupListItems from "@/Components/app/GroupListItems.vue";
+
 </script>
 
 <template>
@@ -29,4 +30,5 @@ import GroupListItems from "@/Components/app/GroupListItems.vue";
 </template>
 
 <style scoped>
+
 </style>

@@ -7,7 +7,7 @@ function isImage(attachment) {
     const mime = attachment.mime.split('/')
     return mime[0].toLowerCase() === 'image'
 }
-</script>
+</script> 
 <template>
     <div class="bg-white border rounded p-4 mb-3">
         <div class="flex items-center gap-2 mb-3">
