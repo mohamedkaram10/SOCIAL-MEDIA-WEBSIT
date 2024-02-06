@@ -12,6 +12,7 @@
                 class="my-2 py-2 px-3 font-medium text-sm bg-red-400 text-white"
             >
                 {{ errors.cover }}
+                <pre>{{user.cover_url}}</pre>
             </div>
             <div class="group relative bg-white">
                 <img :src="coverImageSrc || user.cover_url || '/img/default_cover.jpg'"
