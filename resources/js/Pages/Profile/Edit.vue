@@ -11,7 +11,7 @@ defineProps({
         type: String,
     },
 });
-</script>
+</script>   
 
 <template>
     <div class="space-y-6">
