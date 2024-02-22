@@ -77,7 +77,7 @@ function deletePost(){
                             </MenuItem>
                             <MenuItem v-slot="{ active }">
                                 <button
-                                @click="deletePost"
+                                    @click="deletePost"
                                     :class="[
                   active ? 'bg-indigo-500 text-white' : 'text-gray-900',
                   'group flex w-full items-center rounded-md px-2 py-2 text-sm',
@@ -97,10 +97,10 @@ function deletePost(){
         </div>
         <div class="mb-3">
             <Disclosure v-slot="{ open }">
-                <div v-if="!open" v-html="post.body.substring(0, 200)"/>
+                <div class="ck-content-output" v-if="!open" v-html="post.body.substring(0, 200)"/>
                 <template v-if="post.body.length > 200">
                     <DisclosurePanel>
-                        <div v-html="post.body"/>
+                        <div class="ck-content-output" v-html="post.body"/>
                     </DisclosurePanel>
                     <div class="flex justify-end">
                         <DisclosureButton class="text-blue-500 hover:underline">
