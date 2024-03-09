@@ -39,6 +39,9 @@ Route::put('/post/{post}', [PostController::class, 'update'])
 Route::delete('/post/{post}', [PostController::class, 'destroy'])
 ->name('post.destroy');
 
+Route::get('/post/download/{attachment}', [PostController::class, 'download'])
+->name('post.download');
+
 // Route::apiResource('/posts', PostController::class)->only(['update', 'destroy', 'store']);
 
 require __DIR__.'/auth.php';
