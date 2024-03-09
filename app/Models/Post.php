@@ -15,6 +15,12 @@ class Post extends Model
 
     protected $fillable = ['body', 'user_id'];
 
+    protected $casts = [
+        'updated_at' => 'datetime',
+    ];
+
+    public const UPDATED_AT = null;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -27,6 +33,6 @@ class Post extends Model
 
     public function attachments(): HasMany
     {
-        return $this->hasMany(PostAttachment::class);
+        return $this->hasMany(PostAttachment::class)->latest();
     }
 }
