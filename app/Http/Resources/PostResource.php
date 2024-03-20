@@ -17,8 +17,8 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'body' => $this->body,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
             'user' => new UserResource($this->user),
             'group' => $this->group,
             'attachments' => PostAttachmentResource::collection($this->attachments),
