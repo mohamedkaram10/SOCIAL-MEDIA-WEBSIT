@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use App\Models\PostReaction;
+use Illuminate\Http\Request;
 use App\Models\PostAttachment;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use App\Http\Enums\PostReactionEnum;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
     /**
      * Store a newly created resource in storage.
+     */
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return void
      */
     public function store(StorePostRequest $request)
     {
@@ -53,6 +63,13 @@ class PostController extends Controller
 
     /**
      * Update the specified resource in storage.
+     */
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $post
+     * @return void
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
@@ -105,6 +122,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * destroy
+     *
+     * @param  mixed $post
+     * @return void
+     */
     public function destroy(Post $post)
     {
         $id = Auth::id();
@@ -118,6 +141,12 @@ class PostController extends Controller
         return back();
     }
 
+    /**
+     * download
+     *
+     * @param  mixed $attachment
+     * @return void
+     */
     public function download(PostAttachment $attachment)
     {
         return response()->download(Storage::disk('public')->path($attachment->path), $attachment->name);

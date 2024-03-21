@@ -15,6 +15,12 @@ use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
+    /**
+     * index
+     *
+     * @param  mixed $user
+     * @return void
+     */
     public function index(User $user)
     {
         return Inertia::render('Profile/View', [
@@ -27,6 +33,12 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
+     */
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @return RedirectResponse
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -42,6 +54,12 @@ class ProfileController extends Controller
 
     /**
      * Delete the user's account.
+     */
+    /**
+     * destroy
+     *
+     * @param  mixed $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -61,6 +79,12 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
+    /**
+     * updateImage
+     *
+     * @param  mixed $request
+     * @return void
+     */
     public function updateImage(Request $request)
     {
         $data = $request->validate([

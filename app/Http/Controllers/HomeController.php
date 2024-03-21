@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PostResource;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Resources\PostResource;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Handle the incoming request.
+     */
+    /**
+     * __invoke
+     *
+     * @param  mixed $request
+     * @return void
+     */
+    public function __invoke(Request $request)
     {
         $posts = Post::query()->latest()->paginate();
 
