@@ -6,9 +6,9 @@ use App\Models\Post;
 use App\Models\PostReaction;
 use Illuminate\Http\Request;
 use App\Models\PostAttachment;
+use App\Enums\PostReactionEnum;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use App\Http\Enums\PostReactionEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
@@ -150,5 +150,41 @@ class PostController extends Controller
     public function download(PostAttachment $attachment)
     {
         return response()->download(Storage::disk('public')->path($attachment->path), $attachment->name);
+    }
+
+    /**
+     * postReaction
+     *
+     * @param  mixed $request
+     * @param  mixed $post
+     * @return void
+     */
+    public function postReaction(Request $request, Post $post)
+    {
+        $data = $request->validate([
+            'reaction' => ['required', Rule::in(['like'])]
+        ]);
+
+        $userId = Auth::id();
+        $reaction = PostReaction::where('user_id', $userId)->where('post_id', $post->id)->first();
+
+        if ($reaction) {
+            $hasReaction = false;
+            $reaction->delete();
+        } else {
+            $hasReaction = true;
+            PostReaction::create([
+                'post_id' => $post->id,
+                'user_id' => $userId,
+                'type' => $data['reaction']
+            ]);
+        }
+
+        $reactions = PostReaction::where('post_id', $post->id)->count();
+
+        return response([
+            'num_of_reactions' => $reactions,
+            'current_user_has_reaction' => $hasReaction
+        ]);
     }
 }

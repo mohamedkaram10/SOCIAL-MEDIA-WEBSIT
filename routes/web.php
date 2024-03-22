@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])
+Route::get('/', HomeController::class)
 ->middleware(['auth', 'verified'])
 ->name('home');
 
@@ -41,6 +41,9 @@ Route::delete('/post/{post}', [PostController::class, 'destroy'])
 
 Route::get('/post/download/{attachment}', [PostController::class, 'download'])
 ->name('post.download');
+
+Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])
+->name('post.reaction');
 
 // Route::apiResource('/posts', PostController::class)->only(['update', 'destroy', 'store']);
 
