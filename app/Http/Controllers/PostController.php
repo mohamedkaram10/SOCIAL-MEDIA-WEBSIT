@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\CommentResource;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\PostAttachment;
 use App\Models\PostReaction;
 use Illuminate\Http\Request;
-use App\Models\PostAttachment;
-use App\Enums\PostReactionEnum;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -20,9 +21,10 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     /**
-     * store
+     * store.
      *
-     * @param  mixed $request
+     * @param mixed $request
+     *
      * @return void
      */
     public function store(StorePostRequest $request)
@@ -65,10 +67,11 @@ class PostController extends Controller
      * Update the specified resource in storage.
      */
     /**
-     * update
+     * update.
      *
-     * @param  mixed $request
-     * @param  mixed $post
+     * @param mixed $request
+     * @param mixed $post
+     *
      * @return void
      */
     public function update(UpdatePostRequest $request, Post $post)
@@ -123,9 +126,10 @@ class PostController extends Controller
      * Remove the specified resource from storage.
      */
     /**
-     * destroy
+     * destroy.
      *
-     * @param  mixed $post
+     * @param mixed $post
+     *
      * @return void
      */
     public function destroy(Post $post)
@@ -142,9 +146,10 @@ class PostController extends Controller
     }
 
     /**
-     * download
+     * download.
      *
-     * @param  mixed $attachment
+     * @param mixed $attachment
+     *
      * @return void
      */
     public function download(PostAttachment $attachment)
@@ -153,16 +158,17 @@ class PostController extends Controller
     }
 
     /**
-     * postReaction
+     * postReaction.
      *
-     * @param  mixed $request
-     * @param  mixed $post
+     * @param mixed $request
+     * @param mixed $post
+     *
      * @return void
      */
     public function postReaction(Request $request, Post $post)
     {
         $data = $request->validate([
-            'reaction' => ['required', Rule::in(['like'])]
+            'reaction' => ['required', Rule::in(['like'])],
         ]);
 
         $userId = Auth::id();
@@ -176,7 +182,7 @@ class PostController extends Controller
             PostReaction::create([
                 'post_id' => $post->id,
                 'user_id' => $userId,
-                'type' => $data['reaction']
+                'type' => $data['reaction'],
             ]);
         }
 
@@ -184,7 +190,30 @@ class PostController extends Controller
 
         return response([
             'num_of_reactions' => $reactions,
-            'current_user_has_reaction' => $hasReaction
+            'current_user_has_reaction' => $hasReaction,
         ]);
+    }
+
+    /**
+     * Method createComment.
+     *
+     * @param Request $request [explicite description]
+     * @param Post    $post    [explicite description]
+     *
+     * @return void
+     */
+    public function createComment(Request $request, Post $post)
+    {
+        $data = $request->validate([
+            'comment' => ['required'],
+        ]);
+
+        $comment = Comment::create([
+            'post_id' => $post->id,
+            'comment' => nl2br($data['comment']),
+            'user_id' => Auth::id(),
+        ]);
+
+        return response(new CommentResource($comment), 201);
     }
 }

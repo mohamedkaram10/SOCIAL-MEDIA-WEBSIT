@@ -45,6 +45,9 @@ Route::get('/post/download/{attachment}', [PostController::class, 'download'])
 Route::post('/post/{post}/reaction', [PostController::class, 'postReaction'])
 ->name('post.reaction');
 
+Route::post('/post/{post}/comment', [PostController::class, 'createComment'])
+        ->name('post.comment.create');
+
 // Route::apiResource('/posts', PostController::class)->only(['update', 'destroy', 'store']);
 
 require __DIR__.'/auth.php';

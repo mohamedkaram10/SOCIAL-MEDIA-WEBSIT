@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
+use App\Models\Post;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
@@ -14,9 +14,10 @@ class HomeController extends Controller
      * Handle the incoming request.
      */
     /**
-     * __invoke
+     * __invoke.
      *
-     * @param  mixed $request
+     * @param mixed $request
+     *
      * @return void
      */
     public function __invoke(Request $request)
@@ -24,9 +25,12 @@ class HomeController extends Controller
         $userId = Auth::id();
         $posts = Post::query()
             ->withCount('reactions')
-            ->with(['reactions' => function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            }])
+            ->withCount('comments')
+            ->with([
+                'comments',
+                'reactions' => function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                }])
             ->latest()
             ->paginate(20);
 

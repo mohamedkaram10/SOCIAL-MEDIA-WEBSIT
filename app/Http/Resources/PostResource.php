@@ -17,13 +17,15 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'body' => $this->body,
-            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'user' => new UserResource($this->user),
             'group' => $this->group,
             'attachments' => PostAttachmentResource::collection($this->attachments),
             'num_of_reactions' => $this->reactions_count,
-            'current_user_has_reaction' => $this->reactions->count() > 0
+            'num_of_comments' => $this->comments_count,
+            'current_user_has_reaction' => $this->reactions->count() > 0,
+            'comments' => CommentResource::collection($this->comments),
         ];
     }
 }
