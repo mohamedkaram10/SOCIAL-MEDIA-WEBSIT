@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PostReaction extends Model
+class Reaction extends Model
 {
     use HasFactory;
 
-    const UPDATED_AT = null;
+    public const UPDATED_AT = null;
 
-    protected $fillable = ['post_id', 'user_id', 'type'];
+    protected $fillable = ['object_id', 'object_type', 'user_id', 'type'];
 }
