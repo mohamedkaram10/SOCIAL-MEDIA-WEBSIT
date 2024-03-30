@@ -19,6 +19,7 @@ const props = defineProps({
     index: Number,
     modelValue: Boolean
 })
+
 const show = computed({
     get: () => props.modelValue,
     set: (value) => emit('update:modelValue', value)
