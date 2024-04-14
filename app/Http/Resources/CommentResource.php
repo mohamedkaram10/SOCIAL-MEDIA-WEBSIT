@@ -18,12 +18,12 @@ class CommentResource extends JsonResource
         return [
             'id' => $this->id,
             'comment' => $this->comment,
-            'num_of_reactions' => $this->reactions_count,
-            'current_user_has_reaction' => $this->reactions->count() > 0,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
-            'num_of_comments' => $this->comments_count,
-            'comments' => CommentResource::collection($this->comments),
+            'num_of_reactions' => $this->reactions_count,
+            'num_of_comments' => $this->numOfComments,
+            'current_user_has_reaction' => $this->reactions->count() > 0,
+            'comments' => $this->childComments,
             'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
