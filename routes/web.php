@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -56,6 +57,9 @@ Route::put('/comment/{comment}', [PostController::class, 'updateComment'])
 
 Route::post('/comment/{comment}/reaction', [PostController::class, 'commentReaction'])
     ->name('comment.reaction');
+
+Route::post('/group', [GroupController::class, 'store'])
+    ->name('group.create');
 
 // Route::apiResource('/posts', PostController::class)->only(['update', 'destroy', 'store']);
 // Route::apiResource('/comments', PostController::class)->only(['update', 'destroy', 'store']);
