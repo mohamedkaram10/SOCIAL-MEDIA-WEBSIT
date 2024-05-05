@@ -17,6 +17,8 @@ use App\Http\Requests\StoreGroupRequest;
 use App\Notifications\InvitationInGroup;
 use App\Http\Requests\InviteUsersRequest;
 use App\Notifications\InvitationApproved;
+use App\Notifications\RequestToJoinGroup;
+use Illuminate\Support\Facades\Notification;
 
 class GroupController extends Controller
 {
@@ -121,32 +123,31 @@ class GroupController extends Controller
         $data = $request->validated();
 
         $user = $request->user;
-        
+
         $groupUser = $request->groupUser;
 
         if ($groupUser) {
             $groupUser->delete();
         }
-        
+
         $token = Str::random(256);
         $hours = 24;
-        
+
         GroupUser::create([
-            'status'                => GroupUserStatus::PENDING->value,
-            'role'                  => GroupUserRole::USER->value,
-            'token'                 => $token,
-            'token_expire_date'     => Carbon::now()->addHours($hours),
-            'group_id'              => $group->id,
-            'user_id'               => $user->id,
-            'created_by'            => Auth::id(),
+            'status' => GroupUserStatus::PENDING->value,
+            'role' => GroupUserRole::USER->value,
+            'token' => $token,
+            'token_expire_date' => Carbon::now()->addHours($hours),
+            'group_id' => $group->id,
+            'user_id' => $user->id,
+            'created_by' => Auth::id(),
         ]);
-        
+
         $user->notify(new InvitationInGroup($group, $hours, $token));
-        
+
         return back()->with('success', 'User was invited to join to group');
-        
     }
-    
+
     public function approveInvitation(string $token)
     {
         $groupUser = GroupUser::query()
@@ -156,9 +157,9 @@ class GroupController extends Controller
         $errorTitle = '';
         if (!$groupUser) {
             $errorTitle = 'The link is not valid';
-        } else if ($groupUser->token_used || $groupUser->status === GroupUserStatus::APPROVED->value) {
+        } elseif ($groupUser->token_used || $groupUser->status === GroupUserStatus::APPROVED->value) {
             $errorTitle = 'The link is already used';
-        } else if ($groupUser->token_expire_date < Carbon::now()) {
+        } elseif ($groupUser->token_expire_date < Carbon::now()) {
             $errorTitle = 'The link is expired';
         }
 
@@ -175,5 +176,30 @@ class GroupController extends Controller
         $adminUser->notify(new InvitationApproved($groupUser->group, $groupUser->user));
 
         return redirect(route('group.profile', $groupUser->group))->with('success', 'You accepted to join to group "'.$groupUser->group->name.'"');
+    }
+
+    public function join(Group $group)
+    {
+        $user = \request()->user();
+
+        $status = GroupUserStatus::APPROVED->value;
+        $successMessage = 'You have joined to group "' . $group->name . '"';
+        
+        if (!$group->auto_approval) {
+            $status = GroupUserStatus::PENDING->value;
+
+            Notification::send($group->adminUsers, new RequestToJoinGroup($group, $user));
+            $successMessage = 'Your request has been accepted. You will be notified once you will be approved';
+        }
+
+        GroupUser::create([
+            'status' => $status,
+            'role' => GroupUserRole::USER->value,
+            'user_id' => $user->id,
+            'group_id' => $group->id,
+            'created_by' => $user->id,
+        ]);
+
+        return back()->with('success', $successMessage);
     }
 }
