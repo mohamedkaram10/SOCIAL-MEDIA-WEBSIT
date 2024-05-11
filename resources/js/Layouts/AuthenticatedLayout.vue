@@ -27,6 +27,11 @@ const authUser = usePage().props.auth.user;
                                 />
                             </Link>
                         </div>
+                        <div class="shrink-0 flex items-center font-bold m-2">
+                            <Link :href="route('dashboard')">
+                                Circle Up
+                            </Link>
+                        </div>
 
                     </div>
 

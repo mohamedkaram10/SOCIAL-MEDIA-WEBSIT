@@ -79,7 +79,10 @@ Route::middleware('auth')->group(function () {
     // Groups
 
     Route::post('/group', [GroupController::class, 'store'])
-        ->name('group.create');
+    ->name('group.create');
+    
+    Route::post('/group/approve-request/{group:slug}', [GroupController::class, 'approveRequest'])
+    ->name('group.approveRequest');
 });
 
 require __DIR__.'/auth.php';
